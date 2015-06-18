@@ -4,7 +4,7 @@
 # Author: Fulvio Capone                                                             #
 #####################################################################################
 
-VERSION="Version 1.0"
+VERSION="Version 1.1"
 AUTHOR="2015 Fulvio Capone (fulvio.capone@gmail.com)"
 
 PROGNAME=`type $0 | awk '{print $3}'`  # search for executable on path
@@ -150,26 +150,25 @@ __EOT
 fi
 
 if [ -z "$PIDS" ]; then
-  echo "Process not running." 1>&2
+  echo "$(date +"%F %T") CRITICAL - Process '$process' is not running."
   exit $STATE_CRITICAL
 else
   echo "Process is running."
-  
   for PID in $PIDS; do
 	(( numprocess++ ))
     echo $PID
   done
   if [[ "$numprocess" -lt "$thresh_crit" ]]; then
 	   # Number of PIDS of the process is less than the critical threshold
-	   echo "CRITICAL - $numprocess PIDS of the process '$process' are active."
+	   echo "$(date +"%F %T") CRITICAL - $numprocess PIDS of the process '$process' are active."
 	   exit $STATE_CRITICAL
 	elif [[ "$numprocess" -lt "$thresh_warn" ]]; then
 	   # Number of PIDS of the process is less than the warning threshold
-	   echo "WARNING - $numprocess PIDS of the process '$process' are active."
+	   echo "$(date +"%F %T") WARNING - $numprocess PIDS of the process '$process' are active."
 	   exit $STATE_WARNING
 	else
 	   # Number of PIDS of the process is greater than the warning threshold!
-	   echo "OK - $numprocess PIDS of the process '$process' are active."
+	   echo "$(date +"%F %T") OK - $numprocess PIDS of the process '$process' are active."
 	   exit $STATE_OK
 	fi
 fi
